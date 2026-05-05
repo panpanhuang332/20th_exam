@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第二十屆國際貿易大會考 互動練習</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1b2a;color:#e8e4d8;font-family:"Microsoft JhengHei","蘋方-繁",Helvetica,Arial,sans-serif;min-height:100vh}
+header{background:#112240;border-bottom:2px solid #c9a84c;padding:18px 32px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.hdr{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+h1{font-size:1.2rem;color:#e8c76a;line-height:1.4}
+h1 small{display:block;font-size:.78rem;color:#7a90aa;font-weight:400;margin-top:2px}
+.prog-wrap{min-width:200px;max-width:320px;flex:1}
+.prog-lbl{display:flex;justify-content:space-between;font-size:.78rem;color:#7a90aa;margin-bottom:5px}
+.prog-lbl strong{color:#e8c76a}
+.prog-bar{height:7px;background:rgba(255,255,255,.1);border-radius:6px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#c9a84c,#e8c76a);border-radius:6px;transition:width .4s ease;width:0%}
+nav.tabs{background:#0f1e33;border-bottom:1px solid rgba(201,168,76,.2);padding:0 24px;display:flex;gap:2px;overflow-x:auto}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{padding:11px 16px;background:none;border:none;border-bottom:3px solid transparent;color:#7a90aa;font-size:.82rem;cursor:pointer;white-space:nowrap;font-family:inherit}
+.tab:hover{color:#e8c76a}
+.tab.on{color:#c9a84c;border-bottom-color:#c9a84c}
+.tab em{background:rgba(201,168,76,.15);color:#e8c76a;border-radius:8px;font-size:.7rem;font-style:normal;padding:1px 5px;margin-left:4px}
+main{max-width:880px;margin:0 auto;padding:28px 16px 80px}
+.sec-page{display:none}
+.sec-page.on{display:block}
+.sec-head{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.sec-head .ico{font-size:26px}
+.sec-head h2{font-size:1rem;color:#e8c76a}
+.sec-head p{font-size:.8rem;color:#7a90aa;margin-top:3px}
+/* LC panel */
+.lc-wrap{background:rgba(10,20,38,.8);border:1px solid #c9a84c;border-radius:14px;margin-bottom:24px;overflow:hidden}
+.lc-hdr{background:#1a3457;padding:13px 18px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.lc-hdr h3{font-size:.9rem;color:#e8c76a;flex:1}
+.lc-arr{color:#c9a84c;transition:transform .3s;font-size:1rem}
+.lc-body{display:none;padding:18px}
+.lc-body.on{display:block}
+.lc-tbl{display:grid;grid-template-columns:150px 1fr;gap:3px 14px;font-size:.8rem;line-height:1.75}
+.lf{color:#c9a84c;font-weight:600}
+.lv{color:#e8e4d8}
+.lsep{grid-column:1/-1;border-top:1px solid rgba(201,168,76,.2);margin:8px 0 4px}
+.ltitle{grid-column:1/-1;color:#e8c76a;font-weight:700;font-size:.85rem;margin-top:4px}
+/* Q card */
+.qcard{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.18);border-radius:14px;margin-bottom:18px;overflow:hidden;transition:border-color .25s}
+.qcard.ok{border-color:rgba(46,204,113,.45)}
+.qcard.ng{border-color:rgba(231,76,60,.45)}
+.qhdr{display:flex;align-items:flex-start;gap:12px;padding:18px 20px 14px}
+.qnum{background:linear-gradient(135deg,#c9a84c,#e8c76a);color:#0d1b2a;font-weight:700;font-size:.78rem;min-width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.qtxt{font-size:.94rem;line-height:1.75;color:#f0ede4}
+.qopts{padding:0 20px 18px;display:flex;flex-direction:column;gap:7px}
+.opt-btn{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:9px;border:1px solid rgba(255,255,255,.07);cursor:pointer;background:rgba(255,255,255,.02);text-align:left;width:100%;font-family:inherit;font-size:.88rem;color:#e8e4d8;line-height:1.65;transition:all .2s}
+.opt-btn:hover:not(:disabled){background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.35)}
+.opt-btn:disabled{cursor:default}
+.opt-btn .k{min-width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;transition:all .2s}
+.opt-btn.sel-ok{background:rgba(46,204,113,.12);border-color:rgba(46,204,113,.5)}
+.opt-btn.sel-ok .k{background:#2ecc71;border-color:#2ecc71;color:#fff}
+.opt-btn.sel-ng{background:rgba(231,76,60,.12);border-color:rgba(231,76,60,.5)}
+.opt-btn.sel-ng .k{background:#e74c3c;border-color:#e74c3c;color:#fff}
+.opt-btn.show-ok{background:rgba(46,204,113,.06);border-color:rgba(46,204,113,.3)}
+.opt-btn.show-ok .k{border-color:#2ecc71;color:#2ecc71}
+/* answer box */
+.ans-box{display:none;margin:0 16px 18px;border:1px solid rgba(201,168,76,.25);border-radius:10px;overflow:hidden;animation:sd .3s ease}
+@keyframes sd{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.ans-box.on{display:block}
+.verdict{padding:12px 16px;font-weight:600;font-size:.92rem;display:flex;align-items:center;gap:8px}
+.verdict.ok{background:rgba(46,204,113,.18);color:#2ecc71}
+.verdict.ng{background:rgba(231,76,60,.18);color:#e74c3c}
+.explain{background:rgba(255,255,255,.04);padding:15px 16px;border-top:1px solid rgba(201,168,76,.15)}
+.explain .elbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#c9a84c;margin-bottom:8px;font-weight:700}
+.explain p{font-size:.88rem;line-height:1.85;color:#e8e4d8}
+.explain p+p{margin-top:8px}
+.explain strong{color:#e8c76a}
+.formula{background:rgba(0,0,0,.3);border-left:3px solid #c9a84c;border-radius:0 7px 7px 0;padding:10px 13px;margin:10px 0;font-size:.82rem;line-height:2;color:#f5e4a8;font-family:Consolas,monospace}
+@media(max-width:600px){header{padding:14px 16px}h1{font-size:1rem}main{padding:18px 10px 60px}.qhdr{padding:14px 14px 10px}.qopts{padding:0 14px 14px}.ans-box{margin:0 10px 14px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr">
+    <h1>🌐 第二十屆國際貿易大會考
+      <small>互動練習系統 · 100題全解析</small>
+    </h1>
+    <div class="prog-wrap">
+      <div class="prog-lbl"><span>作答進度</span><strong id="pt">0 / 100</strong></div>
+      <div class="prog-bar"><div class="prog-fill" id="pb"></div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab on" onclick="goSec(0,this)">Q1–20 <em id="s0">0/0</em></button>
+  <button class="tab" onclick="goSec(1,this)">Q21–40 <em id="s1">0/0</em></button>
+  <button class="tab" onclick="goSec(2,this)">Q41–60 <em id="s2">0/0</em></button>
+  <button class="tab" onclick="goSec(3,this)">Q61–80 <em id="s3">0/0</em></button>
+  <button class="tab" onclick="goSec(4,this)">Q81–100 <em id="s4">0/0</em></button>
+</nav>
+
+<main id="main"></main>
+
+<script>
+var answered=new Array(100).fill(null);
+
+var SECS=[
+  {ico:"📦",t:"Q1–20 貿易基礎與 Incoterms",d:"代理交易、政府機關職掌、Incoterms 2020 貿易條件、通關流程、品質數量條件"},
+  {ico:"📋",t:"Q21–40 交貨、契約與付款方式",d:"交貨條件細節、信用狀基礎、報價與要約、CISG接受規定"},
+  {ico:"🏦",t:"Q41–60 信用狀、運輸與保險",d:"UCP600規定、各類運輸文件性質、貨物保險條款與理賠機制"},
+  {ico:"💱",t:"Q61–80 糾紛、計算題與貿易時事",d:"仲裁地選擇、進出口費用計算、台灣與全球貿易趨勢"},
+  {ico:"🔤",t:"Q81–100 商業英文與信用狀實務",d:"貿易英文詞彙填空，及依附件信用狀與單據回答的綜合題"}
+];
+
+// Use a safe data structure - no quotes inside strings
+var QS=[];
+
+function q(n,ans,text,opts,exp){QS.push({n:n,ans:ans,text:text,opts:opts,exp:exp});}
+
+q(1,"C","關於代理交易，下列敘述何者有誤？",
+["代理人通常為委託人代買或代賣","雙方在締約時應注意彼此信用狀況","是委託人與代理人間一種買斷關係","尋找代理可為多元市場進入策略之一"],
+"<p>代理（Agency）≠ 買斷（Distribution）。<br>代理人是<strong>以委託人名義</strong>代為行事，不擁有貨物所有權；買斷（如經銷商）才是自己先買下再以自己名義賣出。C描述的「買斷關係」是錯的。</p>");
+
+q(2,"D","下列敘述何者有誤？",
+["經濟部國際貿易署為我國的貿易主管機關","中央銀行負責國家金融發展與外匯存底的管理","衛生福利部負責藥品、醫療器材、食品及化妝品等進出口審理","經濟部標準檢驗局為主管進出口動植物產品檢疫的政府機關"],
+"<p>動植物的進出口<strong>檢疫</strong>（防止病蟲害傳入台灣）由<strong>農業部動植物防疫檢疫署</strong>負責，不是標準檢驗局。<br>標準檢驗局管的是「工業產品」安全與品質標準。記法：蟲蟲危機找農業部，電器安全找標準局。</p>");
+
+q(3,"A","以 CIF Keelung 為貿易條件時，依據 Incoterms 2020，下列敘述何者正確？",
+["賣方應負擔貨物運抵 Keelung 港前各項運費與保險費","價格中已包含目的港 Keelung 的通關費用","買方應於貨物運抵 Keelung 港時立即付款","交貨地點為 Keelung 港；貨物滅失或毀損的風險自貨物運抵 Keelung 港後移轉買方"],
+"<p><strong>CIF = Cost + Insurance + Freight</strong><br>賣方負責出口通關、支付到目的港的<strong>運費與保險費</strong>。但注意：<br>• 風險轉移點是在出口港<strong>裝船時</strong>，不是抵達基隆港時（D錯）<br>• 不含目的港通關費用（B錯）<br>• 付款方式與貿易條件無關（C錯）</p>");
+
+q(4,"B","如契約中規定「Shipment from Keelung for transportation to London, CIF London Incoterms 2020」，則出口商於何時、何地完成交貨義務？",
+["裝載船舶抵達 London 時","貨物裝載於 Keelung 船上時","貨物在 Keelung 越過船舷欄杆時","於 Keelung 貨櫃場將貨物交付運送人時"],
+"<p>CIF雖然目的地是倫敦，但根據Incoterms 2020，CIF屬於C類條件：交貨義務完成於<strong>出口港（基隆）貨物裝上船時</strong>，之後海上風險由買方承擔。<br>注意：Incoterms 2020已取消「越過船舷欄杆」的說法（那是舊版2000年規定），C選項也不正確。</p>");
+
+q(5,"A","根據 Incoterms 2020 規定，下列哪個貿易條件的進口通關責任歸屬與其他三者不同？",
+["DDP","DPU","DAP","FAS"],
+"<p><strong>DDP（Delivered Duty Paid 完稅後交貨）</strong>是Incoterms中唯一由<strong>賣方負責辦理進口通關並繳納進口稅</strong>的條件。<br>DAP、DPU：賣方送達但不辦進口通關。FAS：出口港船邊交貨，買方負責進口通關。<br>因此DDP與其他三者不同。</p>");
+
+q(6,"C","在我國下列有關貿易流程安排之敘述何者較正確？",
+["進口商在申請開發信用狀前皆應先取得輸入許可證","出口貨物完成通關裝船後，由船公司發給託運人提貨單(D/O)","進口商雖未持有空運提單，仍可向運送人提領以其為收貨人的貨物","在完成進口通關後，進口商應依規定向檢驗(疫)機構進行貨物的進口檢驗(疫)"],
+"<p><strong>空運提單（AWB）是非流通單據</strong>，與海運提單不同：<br>• 海運B/L：認單不認人，必須持正本才能提貨<br>• 空運AWB：認人不認單，收貨人只需出示身分證明即可提貨<br>因此即使進口商沒有空運提單，只要被指定為收貨人（consignee），就可以到機場提貨（C正確）。</p>");
+
+q(7,"B","進口商向開狀銀行付清貨款，以取得貨運單據的手續稱為",
+["換單","贖單","放單","下單"],
+"<p><strong>贖單（Take up Documents）</strong>：進口商付款給開狀銀行，換回被銀行扣押的貨運單據。<br>流程：出口商押匯 → 單據到開狀銀行 → 進口商付款（贖單）→ 銀行交單 → 進口商持單提貨。<br>換單=換成小提單，放單=銀行授權放貨，下單=下採購訂單。</p>");
+
+q(8,"D","我國貨物進出口通關主要方式有三種，其中 C2 是屬於",
+["免審書面文件；免查驗貨物","免審書面文件；須查驗貨物","審核書面文件；須查驗貨物","審核書面文件；免查驗貨物"],
+"<p>台灣海關通關三模式（數字越大越嚴格）：<br><strong>C1</strong>：免審文件 + 免驗貨（最快） 🟢<br><strong>C2</strong>：審核書面文件 + 免查驗貨物 🟡<br><strong>C3</strong>：審核文件 + 實際查驗貨物（最嚴）🔴<br>約70%以上的貨物以C1方式放行。</p>");
+
+q(9,"A","關於進出口貨品分類與各項稅費，下列敘述何者有誤？",
+["目前關務署代收的稅費有貨物稅、營業稅、推廣貿易服務費及商港服務費等","國定稅率分為三欄，第一欄為互惠稅率，第二欄為優惠稅率，第三欄為一般稅率","報關人申報的 C.C.C. Code 若與海關所認定者不同時，可書面向海關聲明異議，請求復查","C.C.C. Code 採用 10 位碼分類，前 6 位碼依據 HS Code 編訂"],
+"<p><strong>商港服務費不由關務署代收</strong>，而是由港務公司（台灣港務股份有限公司）收取。<br>關務署確實代收：關稅、貨物稅、營業稅、推廣貿易服務費……但商港服務費不在其中。<br>記法：「港口停泊費→港務公司收；進口稅費→海關收」。</p>");
+
+q(10,"B","有關財政部跨境電商規定中，除菸酒及實施關稅配額的農產品外，每次進口物品完稅價格在新台幣 2,000 元以下者，可享低價免稅，但同一納稅義務人在多久時間內進口貨物超過多少次，將被視為「進口次數頻繁」而被課稅？",
+["半年度內；免稅放行逾 4 次","半年度內；免稅放行逾 6 次","1 年度內；免稅放行逾 6 次","1 年度內；免稅放行逾 10 次"],
+"<p>網購進口低價免稅規則：每次完稅價格 ≤ NT$2,000 可免稅。<br>但如果同一人在<strong>半年內</strong>已免稅超過<strong>6次</strong>，就被認定為「進口次數頻繁」→ 需要繳稅。<br>此規定是為防止業者用小額多次方式逃稅。答案B：半年內逾6次。</p>");
+
+q(11,"B","關於賣方在 CIP（Incoterms 2020）條件下的義務，下列敘述何者有誤？",
+["支付國際貨物運輸費用","自負費用投保國際貨物運輸保險，且應投保 ICC(C)或類似基本險","提供符合買賣契約的貨物及商業發票","完成貨物出口通關手續"],
+"<p>Incoterms 2020特別規定：<br>• <strong>CIF</strong>：賣方只需投保最低等級 <strong>ICC(C)</strong><br>• <strong>CIP</strong>：賣方必須投保最高等級 <strong>ICC(A)</strong>（全險）<br>B說CIP只要ICC(C)是錯的，CIP要求更高保障。原因：CIP常用於複合運輸，風險較複雜。</p>");
+
+q(12,"D","關於 Incoterms 2020 中「D」類交易條件，下列敘述何者正確？",
+["DPU 由賣方辦理輸出入通關","DDP 由賣方支付進口關稅且負責將貨物送至指定地點並完成卸載","買方在 DAP 及 DPU，無需辦理貨物輸入通關，但得以自身運輸工具運輸貨物","賣方在 DAP、DPU 及 DDP，對買方無訂立運送契約及保險契約之義務"],
+"<p>D組條件分析：<br>• A錯：DPU只由賣方辦出口通關，進口通關由買方<br>• B錯：DDP不需完成卸載（那是DPU的特點）<br>• C錯：買方在DAP/DPU需辦理進口通關<br>• <strong>D正確</strong>：D組條件賣方負責送達，但對買方<strong>沒有義務</strong>替其訂立運送或保險契約</p>");
+
+q(13,"B","一般國際貿易以商業信用狀付款時，下列單據簽發或填送時間的先後順序，何者較適當？①出口報單 ②提單 ③開狀申請書 ④小提單 ⑤出口押匯申請書",
+["①②③④⑤","③①②⑤④","⑤②③①④","③⑤①②④"],
+"<p>正確順序 <strong>③→①→②→⑤→④</strong>：<br>③<strong>開狀申請書</strong>：進口商先去銀行開信用狀<br>①<strong>出口報單</strong>：出口商向海關申報出口<br>②<strong>提單</strong>（B/L）：貨物裝船後船公司簽發<br>⑤<strong>出口押匯申請書</strong>：出口商帶提單等去銀行押匯換現金<br>④<strong>小提單</strong>（D/O）：進口商贖單後換取，到港口提貨用</p>");
+
+q(14,"A","關於我國「關港貿單一窗口」（CPT Single Window），下列敘述何者有誤？",
+["為由我國進出口、物流、報關、倉儲、報驗、貨櫃集散站與金融業者共同成立的民間服務單位","為整合各種貿易簽審、報關及港務申請的服務窗口","整合關、港、貿各權責機關間相關電子化作業的資訊傳遞","為我國各機關與他國公共部門間進行貿易電子資料交換的窗口"],
+"<p>「關港貿單一窗口」是由<strong>財政部關務署主導</strong>建立的政府電子化服務平台，整合海關、港務、貿易主管機關的業務，讓業者一次申報即可。<br>它<strong>不是</strong>由業者共同成立的民間機構（A錯），是政府提供的公共數位服務。</p>");
+
+q(15,"B","出口簽證是指出口商申請",
+["產地證明書","輸出許可證","貨物出口檢驗","進口國優惠關稅待遇"],
+"<p><strong>出口簽證 = 輸出許可證（Export License）</strong><br>不是所有貨物都需要，管制出口品（軍事技術、高科技設備）或配額管理商品才需申請。<br>其他：產地證明書（C/O）、出口檢驗、優惠關稅都是不同概念。</p>");
+
+q(16,"C","關於樣品的約定，下列敘述何者有誤？",
+["農產品交易，不宜只靠樣品來約定品質","當買方以 buyer's sample 詢價時，賣方可提出 counter sample 與對方洽商","為了吸引訂單，賣方應精挑特別好的樣品向買方推銷","對賣方而言，應避免使用類似「Quality: Strictly same as samples」用語來約定品質"],
+"<p>樣品不能太好！<br>如果賣方精挑最好的樣品給買方，但實際大量生產品質達不到，就會引發糾紛（品質以樣品為標準）。賣方應送<strong>有代表性的樣品</strong>，而非特別精選的，所以C是錯誤的說法。</p>");
+
+q(17,"B","關於國際貿易數量條件，下列敘述何者有誤？",
+["一般所謂皮重係指外包裝重量","如契約未規定按毛重或淨重計價時，通常按毛重計價","數量前冠有「about」時，依 UCP600 規定，允許 10% 的寬容幅度","數量增減條款(more or less clause)如未約定價格時，超過的數量大多按照契約價格計算"],
+"<p>重量術語：毛重=貨物+包裝；淨重=只有貨物；皮重=只有包裝。<br>國際貿易慣例：若契約未特別說明，通常以<strong>淨重</strong>計價（買方只買貨物，不想為包裝重量付錢）。<br>B說「通常按毛重計價」是錯的。</p>");
+
+q(18,"A","從台灣出口貨物一批，就四種不同報價：CIF London USD Ⓐ per set；CIF Tokyo USD Ⓑ per set；DDP London USD Ⓒ per set；FOB Taichung USD Ⓓ per set，其高低順序何者較為合理？",
+["Ⓒ>Ⓐ>Ⓑ>Ⓓ","Ⓐ>Ⓑ>Ⓒ>Ⓓ","Ⓒ>Ⓓ>Ⓐ>Ⓑ","Ⓑ>Ⓐ>Ⓒ>Ⓓ"],
+"<p>賣方承擔費用越多，報價越高：<br>• Ⓓ FOB台中：賣方只到船上，最低<br>• Ⓑ CIF Tokyo：含運費保險費到東京，東京較近，運費低<br>• Ⓐ CIF London：倫敦較遠，運費更高<br>• Ⓒ DDP London：含一切費用含進口稅，最高<br>正確順序：<strong>Ⓒ > Ⓐ > Ⓑ > Ⓓ</strong></p>");
+
+q(19,"B","關於 D/A 與 O/A，下列敘述何者有誤？",
+["兩者皆為出貨後付款","前者銀行負責付款；後者銀行不負責付款","兩者賣方皆可向金融機構辦理國際應收帳款承購業務(factoring)","前者貨運單據透過銀行轉交買方；後者貨運單據直接由賣方寄交買方"],
+"<p>D/A和O/A都沒有銀行擔保付款：<br>• <strong>D/A（承兌交單）</strong>：銀行只傳遞文件，買方簽名承兌後拿單，銀行不保證最後付款<br>• <strong>O/A（記帳）</strong>：完全沒有銀行介入，風險最高<br>B說「前者（D/A）銀行負責付款」是錯的。兩者對出口商都有收款風險。</p>");
+
+q(20,"A","關於國際貿易付款條件的約定，下列何者不夠周全？",
+["payment：by T/T remittance","payment：by D/P sight draft","payment：by irrevocable sight L/C","payment：by T/T within 60 days after the B/L date"],
+"<p>「by T/T remittance」只說用電匯，但沒說<strong>什麼時候</strong>匯：是出貨前？出貨後幾天？非常模糊。<br>比較D選項「T/T within 60 days after the B/L date」就很清楚：提單日後60天內電匯。<br>口訣：付款條件必須同時說清楚<strong>「方式＋時間點」</strong>。</p>");
+
+q(21,"D","關於國際貿易交貨條件，下列敘述何者有誤？",
+["CIF 貿易條件的裝船時間即交貨時間","一般多以提單之 on board date 為裝運日","信用狀若未註明是否允許「轉運」，則視為允許","如因第三者的故意或過失，致交貨遲延，賣方無須負責"],
+"<p>即使是第三方（工廠、貨運公司）的問題導致出貨延誤，在買賣契約中，<strong>賣方仍需對買方負責</strong>（除非有免責條款或不可抗力）。<br>就像網路購物包裹被物流公司搞丟，買家還是找賣家賠——賣家再去向物流追償。D是錯誤說法。</p>");
+
+q(22,"C","進口國針對下列何種包裝容器可能要求燻蒸證明書（Fumigation Certificate）？",
+["鐵桶","紙箱","木箱","塑膠袋"],
+"<p>木材可能藏有昆蟲、蟲卵、樹皮甲蟲等，一旦進入進口國可能造成外來種入侵。<br>因此各國要求木質包裝材料（木箱、木托板）需依<strong>ISPM 15國際標準</strong>進行燻蒸或加熱處理，並附<strong>燻蒸證明書</strong>。金屬、塑膠、紙箱沒有此問題。</p>");
+
+q(23,"B","貿易契約中若規定「Packing: neutral packing, 100 units/carton, outer packing: 520mm×400mm×600mm」，則下列何者不得出現在包裝外箱上？",
+["每箱體積","製造商資料","每箱淨重","每箱貨物內裝件數"],
+"<p><strong>中性包裝（Neutral Packing）</strong>= 包裝上不能出現製造商、品牌、工廠等任何可識別來源的資訊。<br>使用場合：OEM代工，品牌商不想讓消費者知道由誰製造。<br>可以出現：裝箱量、尺寸、重量、運輸標記。不能出現：工廠名稱、製造商地址、品牌。</p>");
+
+q(24,"A","若信用狀敘明「Insurance policy for 110% invoice value covering ICC(B) with claims payable in Hamburg.」，下列何者將被視為瑕疵？",
+["投保 ICC(C)險","投保 ICC(A)險","保額為發票金額的 120%","投保 ICC(B)險及 Institute Strikes Clauses (Cargo)"],
+"<p>保險條款原則：只能「更好」，不能「更差」。<br>L/C要求ICC(B)：<br>• 投ICC(A) ✅ 比要求更好<br>• 投ICC(B) ✅ 完全符合<br>• 投ICC(C) ❌ 比要求更差，這是<strong>瑕疵</strong>！<br>• 保額120%>110% ✅ 超出要求，可以<br>ICC等級：ICC(C) 最低 &lt; ICC(B) &lt; ICC(A) 最高</p>");
+
+q(25,"C","下列何者非用以約定貨物品質的國家或機構標準規格（standard specifications）？",
+["UL","CE","GMQ","JIS"],
+"<p>• UL：美國安全認證標準<br>• CE：歐盟產品安全標誌<br>• JIS：日本工業標準<br>• <strong>GMQ（Good Merchantable Quality）</strong>：只是「品質良好、可銷售的」這樣的描述詞，沒有明確測量標準，常用於農產品。<br>GMQ不是官方標準，C為答案。</p>");
+
+q(26,"C","考慮貨品特性，下列何交易數量宜在合約中保留增減彈性？",
+["4,000 bags","2,000 sets","5,000 tons","3,000 pieces"],
+"<p>散裝大宗商品（如穀物、礦砂）以「噸」計量，天然原料採收數量難以精確控制，5,000噸不可能一公斤不差。<br>因此散裝商品合約常加入<strong>More or Less Clause</strong>，允許10%左右誤差。<br>bags/sets/pieces通常是工業製品，數量可精確控制。答案C。</p>");
+
+q(27,"B","下列何者非賣方要求提高產品報價的適當理由？",
+["交貨期限縮短","付款期限縮短","保固期限延長","報價有效期限延長"],
+"<p>分析：<br>• A 交貨期縮短 → 趕工費用增加 → 合理漲價<br>• B <strong>付款期縮短 → 買方更快付錢 → 對賣方有利 → 不需漲價</strong><br>• C 保固期延長 → 售後維修成本增加 → 合理漲價<br>• D 報價有效期延長 → 承擔更長價格風險 → 合理漲價<br>B（付款期縮短）不是漲價理由，反而是賣方的好處。</p>");
+
+q(28,"B","關於以 CIP Tokyo 條件交易的空運貨物，根據 Incoterms 與 UCP 規定，下列敘述何者正確？",
+["貨物在飛機上裝妥時視為完成裝運","空運提單的簽發日視為裝運日","在 Tokyo 機場卸貨時視為完成交貨","裝運日早於交貨日"],
+"<p>依UCP600第23條：空運提單的<strong>簽發日（Issue Date）</strong>視為裝運日（不是飛機起飛日）。<br>原因：航空公司收到貨物才簽發AWB，簽發日實質代表收貨完成準備裝機。<br>CIP交貨點是在出口地交給承運人，不是在東京機場卸貨（C錯）。</p>");
+
+q(29,"C","關於裝運標記（shipping marks），下列敘述何者有誤？",
+["主要用於辨識貨物","產地國標記為法定裝運標記","注意標記以文字表示比以圖案表示實用","主標記圖案應避開文化、宗教或政治禁忌"],
+"<p>注意標記（care marks）應使用<strong>國際通用圖案/符號</strong>（雨傘=怕水、酒杯=易碎、箭頭=此面朝上），跨越語言障礙。<br>若改用文字，在不同語言的港口碼頭根本看不懂。C說「文字比圖案實用」是錯的。</p>");
+
+q(30,"D","如合約規定投保金額為 CIF 的 110%，則下列敘述何者有誤？",
+["此金額為保險人理賠最高金額","此金額包含買方貨價以外的成本費用","此金額包含買方進口的預期利潤","此金額可視為該批貨物對賣方的價值"],
+"<p>110% CIF 的組成：<br>• CIF本身=貨款+運費+保險費（買方的成本）<br>• 額外10%=買方的<strong>預期進口利潤</strong><br>這代表的是「<strong>對買方</strong>的完整價值」，而非對賣方的價值——賣方收到貨款後，這批貨跟賣方已無關。D說「對賣方的價值」是錯的。</p>");
+
+q(31,"A","報價單上加註「This offer is subject to our final confirmation」，則下列敘述何者正確？",
+["此報價為要約之引誘","報價人受到報價內容約束","此報價具有要約之效力","被報價人的接受到達報價人時，契約才成立"],
+"<p>「subject to our final confirmation（需我方最終確認）」表示賣方保留確認權，就算對方說OK，賣方還保留是否成交的權利。<br>這是<strong>要約之引誘（Invitation to Treat）</strong>，不是有約束力的正式要約。A正確。<br>比較：穩固報價（Firm Offer）一旦對方接受，契約即成立。</p>");
+
+q(32,"B","下列何者通常不被視為國際貿易的正式報價？",
+["Quotation","Price List","Offer Sheet","Proforma Invoice"],
+"<p><strong>Price List（價目表）</strong>：面向所有人，沒有指定買家、數量不明確，不算正式報價。就像餐廳菜單不是「向你報價」，只是展示有什麼可賣。<br>正式報價需具備：特定買家、品名規格、數量、價格、交貨條件等完整要素。</p>");
+
+q(33,"D","一般而言，穩固報價（Firm Offer）生效之後",
+["可以隨時撤回","在被報價人表示接受之前，報價人可變更內容","被報價人必須受該報價約束","若對方提出反報價，原報價即失效"],
+"<p>穩固報價在有效期內，報價人受約束，不能隨意撤回或更改（A、B錯）。被報價人也沒有義務非接受不可（C錯）。<br>重點：如果對方說「你的價格我想改成較低」——這就是<strong>反報價（Counter Offer）</strong>，原報價自動失效（D正確）。</p>");
+
+q(34,"C","關於接受（Acceptance），根據聯合國國際貨物買賣契約公約（CISG）規定，下列敘述何者正確？",
+["接受於發出時生效，未生效前可以撤回","接受於發出時生效，生效後可以撤銷","接受於送達時生效，未生效前可以撤回","接受於送達時生效，生效後可以撤銷"],
+"<p>CISG採「<strong>到達主義</strong>」：接受必須在<strong>送達對方（報價人）</strong>時才生效。<br>• 接受生效前（尚未到達對方）：可以<strong>撤回</strong>（例如再發一封取消信）<br>• 接受生效後（已送達對方）：不可撤銷（契約已成立）<br>答案C。</p>");
+
+q(35,"A","關於國際貿易契約，下列敘述何者有誤？",
+["應由雙方當事人當面簽署","可由當事人一方將交易內容製成確認書，經另一方確認","不一定要簽訂書面契約書","雙方可事先約定適用於未來每筆交易的契約一般條款"],
+"<p>國際貿易契約<strong>不需要雙方當面見面簽署</strong>，可用電郵、傳真、書面函件等方式確認。CISG也規定，除非另有約定，契約不需書面形式。A是錯誤說法。</p>");
+
+q(36,"D","任何一張信用狀上一定會明示的日期及時間為",
+["最後裝船日及提示期限","開狀日及最後裝船日","最後裝船日及失效日","開狀日及失效日"],
+"<p>依UCP600，信用狀必定包含：<br>• <strong>開狀日（Field 31C）</strong>：信用狀何時開出<br>• <strong>失效日（Field 31D）</strong>：信用狀何時到期（最後提示單據期限）<br>最後裝船日（Field 44C）不一定要明列，若未列出以失效日為準。答案D。</p>");
+
+q(37,"B","開狀銀行不會將下列何種情況視為單據瑕疵？",
+["要求之檢驗報告書未提示","據進口商稱貨物品質不良","匯票未經簽字","押匯金額超過信用狀允許範圍"],
+"<p>UCP600核心原則：<strong>單據與貨物的分離原則</strong>。<br>銀行只審核「文件是否符合信用狀要求」，跟實際貨物品質完全無關。<br>「進口商說貨物品質不良」對銀行而言<strong>完全不是單據瑕疵</strong>，銀行繼續付款。品質糾紛應透過索賠、仲裁解決。答案B。</p>");
+
+q(38,"A","關於託收（Collection）付款方式，下列敘述何者正確？",
+["原則上以進口商為匯票付款人","依 URC522 委託人係直接洽請 Collecting Banks 處理託收","D/A 的匯票為「at 30 days after date」時，其到期日為裝船日後 30 天","D/A 的匯票為「xx days after sight」時，則其到期起算日為匯票簽發日"],
+"<p>託收匯票：出票人=出口商；<strong>付款人（Drawee）=進口商</strong>（A正確）。<br>• B錯：委託人（出口商）委託「託收銀行」，再由託收銀行聯繫代收銀行<br>• C錯：「after date」從匯票<strong>簽發日</strong>起算，不是裝船日<br>• D錯：「after sight」從<strong>承兌日（進口商看到匯票時）</strong>起算</p>");
+
+q(39,"B","關於託收（collection）的各種處理方式，下列敘述何者正確？",
+["託收銀行須審核 D/P 及 D/A 的託收單據","D/P 託收所附隨之匯票不一定是即期","光票託收（clean collection）須附隨商業單據","附隨遠期匯票託收，但託收指示書未指定交單方式時，代收銀行將以 D/A 方式處理"],
+"<p>B正確：D/P（付款交單）可以用即期或遠期匯票，不一定是即期。<br>• 即期D/P：進口商看到匯票立即付款取單<br>• 遠期D/P：匯票到期時付款才能取單<br>D錯：指示書未指定時，代收銀行以<strong>D/P</strong>方式處理（較安全）而非D/A。</p>");
+
+q(40,"C","下列付款方式何者不涉及匯款？",
+["O/A","CWO","D/P","Consignment Sales"],
+"<p>「匯款（Remittance）」是買方主動把錢匯給賣方。<br>• O/A：賣方先出貨，買方之後匯款<br>• CWO：買方先匯款再出貨<br>• Consignment（寄售）：銷售後匯款<br>• <strong>D/P（付款交單）</strong>：透過銀行提示匯票，進口商向代收銀行付款取單，這是「<strong>託收（Collection）</strong>」，不是匯款。答案C。</p>");
+
+q(41,"C","關於 Forfaiting，下列敘述何者有誤？",
+["融資期限多為中長期","提供出口商融資及避險","Forfaiter 對出口商有追索權","通常有進口國銀行或政府機構對票據保證"],
+"<p>Forfaiting最大特點：<strong>無追索權（Without Recourse）</strong>。<br>出口商把應收帳款賣給Forfaiter後，若進口商不付錢，Forfaiter<strong>不能</strong>向出口商追索！Forfaiter完全承擔信用風險。<br>對出口商非常有利：拿到現金、不怕買家倒帳。C說「有追索權」是錯的。</p>");
+
+q(42,"A","當信用狀未載明下列何者時，依 UCP600 規定不得分割轉讓 ①transferable ②partial shipments allowed ③transhipment allowed ④available with any bank by negotiation",
+["①②","③④","①③","②④"],
+"<p>依UCP600第38條，分割轉讓需同時具備：<br>• ①<strong>Transferable</strong>：信用狀沒此字根本不能轉讓<br>• ②<strong>Partial Shipments Allowed</strong>：若不允許分批裝運，就無法把金額分給多個第二受益人<br>兩者缺一不可，答案A（①②）。</p>");
+
+q(43,"A","關於託收，下列敘述何者有誤？",
+["代收銀行直接受出口商委託辦理託收業務","代收銀行可為提示銀行","對出口商而言，通常託收銀行在本國，代收銀行在國外","相關銀行均不審核單據"],
+"<p>託收委託鏈：<br>出口商 → 委託 → <strong>託收銀行（本國）</strong>→ 委託 → <strong>代收銀行（進口國）</strong>→ 提示進口商<br>出口商只認識自己的往來銀行，不直接聯繫國外代收銀行。A是錯誤說法。<br>D正確：與L/C不同，託收銀行不審核單據內容。</p>");
+
+q(44,"C","以 O/A 方式付款時，由買方向銀行申請開給賣方的擔保信用狀（standby L/C）通常規定應提示下列何者？①匯票 ②提單 ③發票 ④聲明書",
+["①②","③④","①④","②③"],
+"<p>備用信用狀（Standby L/C）是最後防線：只有買方違約不付款時才動用。<br>此時賣方需提示：<br>• ①<strong>匯票</strong>：代表「我有這筆債權」<br>• ④<strong>聲明書</strong>：聲明「買方已未依O/A條款付款」<br>不需提單（貨已送出）、發票（已開過）。答案C（①④）。</p>");
+
+q(45,"D","Factoring 適用於下列何種付款方式？①CWO ②O/A ③D/A ④L/C",
+["①②","③④","①④","②③"],
+"<p>Factoring（應收帳款承購）是把未收回的貨款賣給Factor換現金，只適用於有「應收帳款」的賒銷：<br>• ①CWO：先收錢再出貨，沒有應收帳款 ✗<br>• ②<strong>O/A</strong>：先出貨後收款，有應收帳款 ✓<br>• ③<strong>D/A</strong>：有遠期匯票屬應收帳款 ✓<br>• ④L/C：有銀行擔保，不需factoring ✗<br>答案D（②③）。</p>");
+
+q(46,"B","關於 CY/CFS 運輸方式，下列敘述何者正確？",
+["起運地的裝櫃作業由託運人負責，目的地的拆櫃作業由受貨人負責","起運地的裝櫃作業由託運人負責，目的地的拆櫃作業由運送人負責","起運地的裝櫃作業由運送人負責，目的地的拆櫃作業由受貨人負責","起運地的裝櫃作業由運送人負責，目的地的拆櫃作業亦由運送人負責"],
+"<p>CY/CFS分解：<br>• <strong>CY（Container Yard）起運地</strong>：貨主（託運人）自行裝箱，整個貨櫃送到貨櫃場<br>• <strong>CFS（Container Freight Station）目的地</strong>：運送人把貨櫃拆箱，各家貨物分開<br>適用於「整櫃出口，目的地拆分給多個收貨人」的情況。答案B。</p>");
+
+q(47,"A","以海運進口貨物時須憑以辦理通關提貨的文件為何？",
+["Delivery Order","Sea Waybill","Bill of Lading","Shipping Order"],
+"<p>流程：進口商贖單取得B/L → 拿B/L向船公司換<strong>Delivery Order（小提單/D/O）</strong>→ 持D/O辦理通關 → 到倉庫提貨。<br>• B/L：物權證書，用來換D/O<br>• D/O：實際到倉庫提貨的憑單<br>• Sea Waybill：非物權證書，認人不認單，不需D/O<br>• Shipping Order：出口商託運給船公司的文件</p>");
+
+q(48,"D","關於空運提單，下列敘述何者有誤？",
+["「Declared Value for Carriage」欄位可不填入貨物實際價值","「Insurance Amount Required」欄位可以依需要選填","「Consignee」欄位不使用指示式記載","「Air Freight Charges」欄位應由託運人詳實填寫"],
+"<p>空運提單的運費欄位（Air Freight Charges）由<strong>航空公司</strong>根據計費重量和費率計算後填寫，不是由託運人填寫。就像搭計程車，跳錶金額是司機的表算的，不是乘客報數字。D是錯誤說法。</p>");
+
+q(49,"C","關於複合運輸，下列敘述何者正確？",
+["為 Port to Port 運輸觀念","與貨運運輸技術無關","其業者以自己名義，安排全程運輸","其業者僅參與全程運輸之一部分"],
+"<p>複合運輸（Multimodal Transport）特點：<br>• 使用兩種以上不同運輸工具（船+鐵路+卡車）<br>• 是「Door to Door」，不是Port to Port（A錯）<br>• MTO以<strong>自己名義</strong>向貨主負責全程（C正確）<br>• 與貨櫃技術密切相關（B錯）<br>就像旅行社幫你規劃整個旅程，出了問題找旅行社。</p>");
+
+q(50,"D","有關「簡式提單（short form B/L）」之敘述，下列何者不適當？",
+["其功能與詳式提單相同","其正面與詳式提單相同","係指提單背面無運送條款的記載","在 L/C 無特別規定下，押匯銀行將拒絕接受簡式提單"],
+"<p>依UCP600第20條：押匯銀行<strong>應接受</strong>簡式提單，除非信用狀明文禁止。<br>D說「會拒絕」是錯的。簡式提單背面沒有印完整運送條款，但功能、正面格式與詳式提單相同（A、B正確）。</p>");
+
+q(51,"A","關於海運提單上「notify party」該欄，下列敘述何者有誤？",
+["若以 to order 字樣起頭，該提單即成為可轉讓提單","若信用狀未特別規定，則該欄可免填","大多填入進口商名稱與地址","可填入兩位以上 notify party"],
+"<p>提單可轉讓性由<strong>Consignee（受貨人）欄</strong>決定：<br>• Consignee寫「To Order」→ 指示式提單（可轉讓）<br>• Consignee寫具體名稱 → 記名式提單（不可轉讓）<br><strong>Notify Party欄</strong>只是「到港通知聯絡人」，不影響提單可轉讓性。A說「notify party欄寫to order就變可轉讓」是錯的。</p>");
+
+q(52,"D","關於海運業者的收費，下列敘述何者有誤？",
+["定期船針對整櫃和併櫃兩種運送方式分別計收運費","貨運承攬業的運費報價可能低於船公司的","和海運運費同盟訂約的貨主，可享有運費優待","併櫃貨物採依重量或體積所計較低者收取運費"],
+"<p>海運運費計算（W/M原則）：<br>• 計算重量噸（1,000KG=1噸）<br>• 計算體積噸（1CBM=1噸）<br>• 取<strong>較高者</strong>計費（對船公司有利）<br>D說「取較低者」是錯的！船公司選對自己有利的方式計費。</p>");
+
+q(53,"C","關於空運，下列敘述何者有誤？",
+["因電子商務盛行國際航空貨運金額呈現成長趨勢","貨主通常透過貨運承攬業者（freight forwarder）交運貨物","HAWB（House Air Waybill）號碼的前三碼為阿拉伯數字，是航空公司在 IATA 的代碼","空運提單正本一式三聯，即使信用狀要求以全套押匯，提示「Original for Shipper」一聯即可"],
+"<p>• <strong>MAWB（Master AWB）</strong>：由航空公司簽發，前三碼是<strong>IATA航空公司代碼</strong><br>• <strong>HAWB（House AWB）</strong>：由承攬業者簽發，前三碼是承攬業自己訂的代碼，<strong>不是</strong>IATA代碼<br>C說HAWB前三碼是IATA代碼，這是錯的。答案C。</p>");
+
+q(54,"D","台商有一批貨物欲運往紐約，但不巧巴拿馬運河因故暫時關閉，則下列替代路線何者最省運輸時間？",
+["繞道南美洲麥哲倫海峽","繞道南非好望角","改走蘇伊士運河","走北美小陸橋"],
+"<p><strong>北美小陸橋（Mini Land Bridge）</strong>：台灣→美西港口（如洛杉磯）→ 鐵路橫越美國 → 紐約，比繞道任何海峽都快。<br>其他替代路線（麥哲倫海峽、好望角、蘇伊士）都要大幅繞遠路，增加非常多時間。答案D。</p>");
+
+q(55,"B","下列運送單據何者具物權單證（document of title）性質？",
+["air courier receipt","bill of lading","sea waybill","air waybill"],
+"<p>「物權單證」= 持有此文件就代表持有貨物所有權，可背書轉讓、質押融資。<br>• <strong>B/L（Bill of Lading）</strong> ✅：物權證書，「認單不認人」<br>• Sea Waybill：非物權證書，認人不認單<br>• Air Waybill：非物權證書<br>• Air Courier Receipt：快遞收據，非物權證書<br>答案B。</p>");
+
+q(56,"A","某批貨物投保 ICC(A) 2009.1.1，貨物在運送過程中發生毀損，則保險公司承擔下列何項事故所致的貨物毀損？",
+["整件貨物於裝船時落海","保險標的正常漏損","惡劣氣候導致航程遲延","被保險人在保險生效前包裝不當"],
+"<p>ICC(A)是全險條款，採「除外責任制」：除特定除外責任外，一切意外損失都賠。<br>• A ✅：裝船時整件落海→意外事故，賠<br>• B ❌：正常漏損→除外責任，不賠<br>• C ❌：航程延遲損失→除外責任，不賠<br>• D ❌：保險生效前包裝不當→除外責任，不賠</p>");
+
+q(57,"C","關於 ICC(A)、ICC(B) 及 ICC(C)，下列敘述何者有誤？",
+["ICC(A)、ICC(B) 及 ICC(C) 皆承保投棄危險","ICC(C) 保險費率最低，ICC(A) 承保範圍最大","ICC(B) 及 ICC(C) 以概括式呈現所有承保項目","ICC(A)、ICC(B) 及 ICC(C) 皆不承保兵險及罷工險"],
+"<p>三種條款的結構差異：<br>• <strong>ICC(A)</strong>：<strong>概括式（All Risks）</strong>→ 先說什麼都保，再列除外項目<br>• <strong>ICC(B)和ICC(C)</strong>：<strong>列舉式（Named Perils）</strong>→ 明確列出才賠的風險項目<br>C說ICC(B)和ICC(C)是「概括式」，這是錯的，它們是列舉式。</p>");
+
+q(58,"B","投保託收輸出綜合保險者，在進口商拒絕付款贖單時，下列情況何者能獲得理賠？",
+["空運提單之受貨人（consignee）作成進口商","全套正本海運提單經由託收銀行轉代收銀行託收","出口商與進口商有串通之事實","一份以進口商為受貨人之海運提單正本直接寄送進口商"],
+"<p>理賠邏輯：若全套B/L都在銀行控制中（走託收路線），進口商付款前無法提貨 → 這才是真正的「拒付」。<br>• A、D：AWB或B/L直接寄給進口商 → 進口商不付款也能提貨 → 風險控制失效 → 不賠<br>• C：有串通 → 詐欺 → 不賠<br>• <strong>B</strong>：全套B/L走銀行管道 ✅ → 可理賠</p>");
+
+q(59,"C","出口商就某一段期間所要出口貨物向保險公司投保，此時保險公司所簽發的保險單據稱為",
+["暫保單（cover note）","流動保單（floating policy）","開口保單（open policy）","保險證明書（insurance certificate）"],
+"<p><strong>開口保單（Open Policy）</strong>：針對某段期間內所有出口貨物的「預約保險」。<br>適合頻繁出口商：一次簽約，未來每批貨自動納入保障，每次只要申報數量和船名即可。<br>保險證明書是在開口保單下每次出口時開立的個別證明。</p>");
+
+q(60,"D","關於輸出保險，下列敘述何者有誤？",
+["可幫出口商規避買方信用及國家風險","可讓出口商用於申辦貿易融資","其保險業務常配合政府經貿政策","信用狀交易皆不須投保輸出保險"],
+"<p>D說「L/C交易都不需要輸出保險」是錯的。<br>L/C雖有銀行擔保，但仍有：開狀銀行倒閉風險、進口國政治風險（外匯管制、戰爭）等。即使銀行願意付款，匯款也可能因政治因素出不來。因此L/C交易特定情況下也應投保輸出保險。</p>");
+
+q(61,"B","關於轉押匯，下列敘述何者有誤？",
+["押匯時需另支付轉押匯利息","該信用狀一定是可轉讓信用狀","通常需提早作第一次押匯，避免逾越時效","通常需作至少二次押匯，故將增加手續費支出"],
+"<p><strong>轉押匯（Back-to-Back Negotiation）</strong>≠ 可轉讓信用狀（Transferable L/C）<br>轉押匯是押匯銀行收到匯票後，再向另一家銀行辦理轉讓加速取款，與信用狀是否「可轉讓」是完全不同的概念。B是錯誤說法。</p>");
+
+q(62,"A","某進口商向銀行申請開出「對外30天且對內30天」的遠期信用狀。請問下列敘述何者錯誤？",
+["進口商於開狀銀行接受單據後 30 天付清所有款項","開狀銀行接受單據後 30 天付款給出口商","出口商給進口商 30 天的融資期間","開狀銀行給進口商 30 天的融資期間"],
+"<p>「對外30天」= 開狀銀行接受單據後，30天付款給出口商（B正確）。<br>「對內30天」= 開狀銀行給進口商30天籌款（D正確）。<br>A說「進口商於銀行接受單據後30天付清」——錯誤在於：進口商付款期間是另外計算的，兩個30天不是簡單加總，且A的描述暗示進口商付款的時序有誤。</p>");
+
+q(63,"C","當貨物會比透過銀行管道轉來的運送單據先到達時，進口商如要及時提貨，下列何者非變通辦法？",
+["電報放貨","擔保提貨","船邊提貨","副提單背書"],
+"<p>當貨物比單據先到（近洋航線常見）的解決方式：<br>• 電報放貨（Telex Release）：出口商電告船公司，無需正本提貨 ✓<br>• 擔保提貨（Letter of Indemnity）：向船公司出具擔保書 ✓<br>• 副提單背書：以副本加背書提貨 ✓<br>• <strong>船邊提貨</strong>：卸船時在碼頭提貨，仍需持有正本B/L，不能解決「單據未到」問題 ✗</p>");
+
+q(64,"D","根據 UCP600，若 L/C 未規定裝運日，則下列敘述何者正確？",
+["裝運日不得在開狀日之前","裝運日可在有效期之後","裝運日可在提示日之後","裝運日最遲應為失效日（expiry date）"],
+"<p>依UCP600第29條：若信用狀未規定最後裝船日，則最後裝運日預設為<strong>信用狀失效日（Expiry Date）</strong>。裝運日不能晚於失效日。答案D。</p>");
+
+q(65,"D","進口商向運送人提貨時，下列何者不適用「認人不認單」的方式？",
+["Forwarder's Cargo Receipt","Sea Waybill","AWB","B/L"],
+"<p>「認人不認單」= 只要能證明你是收貨人，不需特定文件即可提貨：<br>• Forwarder Cargo Receipt、Sea Waybill、AWB：都是認人不認單 ✓<br>• <strong>B/L（海運提單）</strong>：是物權文件，「認單不認人」——必須出示正本才能提貨 ✗<br>D正確（不適用認人不認單）。</p>");
+
+q(66,"A","投保 ICC(A) 的併櫃進口貨物，到港卸貨時發現其數量少於運送單據所載。關於其處置方式，下列敘述何者正確？",
+["可先向保險公司索賠，再由保險公司向船公司代位求償","保險公司通常會要求被保險人先向船公司求償","船公司賠多少，保險公司也會賠償相等金額","船公司若不回應，則保險公司不賠"],
+"<p>這是<strong>代位求償（Subrogation）</strong>機制：<br>① 進口商發現貨物短缺 → 向保險公司索賠<br>② 保險公司賠付後，取得向船公司追索的代位求償權<br>③ 保險公司代替進口商去向船公司要錢<br>進口商不需自己先與船公司纏鬥，這是買保險的重要好處。答案A。</p>");
+
+q(67,"B","關於仲裁地之選擇，下列敘述何者有誤？",
+["以起岸地為仲裁地，方便仲裁人實際查看貨物狀況，適合品質不良之糾紛","在國外所作成的仲裁裁決，可據以直接向本國法院聲請執行","以第三國為仲裁地，通常是基於政治理由或為了獲得較公正的裁決","以被告所在地為仲裁地，方便仲裁裁決之執行"],
+"<p>B說「可直接向本國法院聲請執行」——不對！<br>依《紐約公約》（1958年），各締約國承認外國仲裁裁決的執行力，但程序是：<br>① 當事人向本國法院<strong>聲請承認</strong>外國仲裁裁決<br>② 法院審查後才能強制執行<br>不能「直接」執行，必須先走法律認可程序。B是錯誤說法。</p>");
+
+q(68,"C","從誠信原則和維護交易關係的角度，貿易糾紛透過下列哪一種方式解決最為理想？",
+["訴訟","調解","和解","仲裁"],
+"<p>解決糾紛方式比較：<br>• <strong>和解</strong>：雙方自願協商，費用最低、速度最快、最能維持商業關係 ✅<br>• 調解：引入第三方協助，結果不具強制力<br>• 仲裁：有拘束力，但費用高、耗時<br>• 訴訟：最費時費錢，關係通常破裂<br>從「誠信原則」和「維護交易關係」角度，優先嘗試和解。答案C。</p>");
+
+q(69,"A","進口商以 CFR 條件進口一批農產品，貨物運抵目的港檢疫時，發現其上有大量蟲卵，依進口國規定將予以退運或銷毀，則進口商該如何因應？",
+["向出口商索賠","向保險公司索賠","向報關行索賠","因 CFR 條件的交貨地點為出口地，進口商應自行承擔損失"],
+"<p>CFR條件下，貨物在出口港裝船後海上風險轉移給買方。但蟲卵問題不是「海上風險」，而是賣方交付的貨物<strong>不符合合約要求</strong>（農產品本應無蟲卵）。<br>這是<strong>貨物品質瑕疵</strong>，責任在賣方，與CFR風險轉移無關。向出口商索賠。答案A。</p>");
+
+q(70,"B","關於海上貨物運輸保險的共同海損，下列敘述何者正確？",
+["當發生共同海損時，可視為推定全損","以各被保存財產價值相對於共同海損總額之比例，由各利害關係人分擔","被犧牲的財產不須分擔共同海損","協會貨物條款(B)不承保共同海損犧牲"],
+"<p>船在海上快沉了，船長丟掉部分貨物減輕重量以保全船隻……<br><strong>共同海損（General Average）</strong>：損失由所有獲救財產所有人按<strong>獲救財產價值比例</strong>共同分擔。B正確。<br>ICC(B)和ICC(C)都承保共同海損（D錯）。被犧牲財產所有人也可獲補償（C錯）。</p>");
+
+q(71,"C","某公司出口貨物一批，報價為每箱 USD360 CFR London。每箱體積 24×24×20（英吋），每箱毛重 38 公斤，運費 USD120/CBM/TON 並加收直航附加費 20% 及港口附加費 10%。請問改報 FOB 價格，每箱應為多少？",
+["USD354.54","USD337.32","USD330.52","USD355.80"],
+"<p><strong>計算步驟：</strong></p><div class='formula'>① 每箱體積 = 24×24×20 ÷ 1,728 ÷ 35.315 ≈ 0.189 CBM<br>② 每箱毛重 = 38 ÷ 1,000 = 0.038 TON<br>③ 體積噸(0.189) > 重量噸(0.038) → 按體積噸計費<br>④ 每箱運費 = 0.189 × 120 × (1+20%+10%)<br>   = 0.189 × 120 × 1.3 = USD29.48<br>⑤ FOB = CFR - 運費 = USD360 - USD29.48 = USD330.52</div><p>答案：<strong>C（USD330.52）</strong></p>");
+
+q(72,"A","某公司進口貨物，申報價格FOB USD160,000，運費USD4,500，保險費USD500。賣出匯率USD1=TWD28.30。進口關稅8%，貨物稅4%，營業稅5%，推廣貿易服務費0.04%。關於稅費何者正確？（元以下捨去）",
+["營業稅: TWD262,239；貨物稅: TWD201,722","關稅: TWD373,560；營業稅: TWD252,153","推廣貿易服務費: TWD1,867；關稅: TWD372,240","貨物稅: TWD201,722；推廣貿易服務費: TWD1,861"],
+"<p><strong>進口稅費計算（使用賣出匯率）：</strong></p><div class='formula'>完稅價格(CIF) = (160,000+4,500+500) × 28.30<br>= USD165,000 × 28.30 = TWD4,669,500<br><br>關稅 = 4,669,500 × 8% = TWD373,560<br>貨物稅 = (4,669,500+373,560) × 4% = TWD201,722<br>營業稅 = (4,669,500+373,560+201,722) × 5% = TWD262,239<br>推廣貿易服務費 = 4,669,500 × 0.04% = TWD1,867</div><p>答案：<strong>A（營業稅262,239；貨物稅201,722）</strong></p>");
+
+q(73,"B","某公司出口貨物30PCS，包裝5PCS/箱/20×25×30（英吋）/40KGS，體積重366立方英吋=1KG，費率：最低TWD2,200；&lt;45KG: TWD430/KG；≥45KG: TWD330/KG；≥100KG: TWD306/KG；≥300KG: TWD230/KG。應付多少空運費？",
+["TWD56,580","TWD69,000","TWD73,440","TWD75,276"],
+"<p><strong>空運費計算：</strong></p><div class='formula'>箱數 = 30 ÷ 5 = 6 箱<br>體積重 = (20×25×30×6) ÷ 366 ≈ 246 KGS<br>實際毛重 = 40 × 6 = 240 KGS<br>→ 取較大者：246 KGS（體積重）<br><br>原級距(≥100KG) = 306 × 246 = TWD75,276<br>較高級距(≥300KG) = 230 × 300 = TWD69,000<br>→ 取較低者（對貨主有利）= TWD69,000</div><p>答案：<strong>B（TWD69,000）</strong></p>");
+
+q(74,"D","出口商持見票後90天付款的遠期信用狀，金額USD6,000。押匯日買入匯率32.00；到期日買入匯率32.50；貼現息8% p.a.，計息期間加15天。請問出口商收入何者正確？",
+["貼現：TWD188,208；等匯票到期：TWD195,600","貼現：TWD188,823；等匯票到期：TWD195,600","貼現：TWD188,532；等匯票到期：TWD195,000","貼現：TWD187,622；等匯票到期：TWD195,000"],
+"<p><strong>計算：</strong></p><div class='formula'>【等匯票到期】<br>USD6,000 × 32.50 = TWD195,000<br><br>【貼現（現值）】<br>計息期間 = 90 + 15 = 105 天<br>現值 = USD6,000 ÷ (1 + 8% × 105/360)<br>     = USD6,000 ÷ 1.02333 ≈ USD5,863.19<br>換台幣 = 5,863.19 × 32.00 = TWD187,622</div><p>答案：<strong>D（貼現187,622；等到期195,000）</strong></p>");
+
+q(75,"C","某公司開L/C進口共180箱，FOB USD40,000。匯率USD1=TWD32，每箱60×50×40cm，運費USD250/CBM，保險費USD600，進口稅費TWD36,800，銀行費用L/C金額0.1%，其他費用TWD12,000，轉售利潤15%。請問轉售報價為多少？",
+["TWD1,522,080","TWD1,748,920","TWD1,750,392","TWD1,826,496"],
+"<p><strong>計算：</strong></p><div class='formula'>每箱體積 = 0.6×0.5×0.4 = 0.12 CBM<br>總運費 = USD250 × 0.12 × 180 = USD5,400<br>CIF = 40,000+5,400+600 = USD46,000<br>換台幣 = USD46,000 × 32 = TWD1,472,000<br><br>銀行費用 = USD40,000 × 0.1% × 32 = TWD1,280<br>進口總成本 = 1,472,000+36,800+1,280+12,000<br>           = TWD1,522,080<br>轉售報價 = 1,522,080 × 115% = TWD1,750,392</div><p>答案：<strong>C（TWD1,750,392）</strong></p>");
+
+q(76,"A","我國 2024 年出口金額超過 4,700 億美元，較上一年成長 9.9%，主要係受惠於下列何者的出口暢旺？",
+["人工智慧、高效能運算及雲端產業","石化產業","基本金屬及其製品產業","太陽能電池模組產業"],
+"<p>2024年全球對AI相關基礎設施（伺服器、GPU、AI晶片）需求大幅成長，台灣作為全球半導體與科技供應鏈核心，受惠最大的是AI晶片、高效能運算（HPC）伺服器、雲端相關硬體，共同推動台灣出口突破歷史新高。答案A。</p>");
+
+q(77,"A","我國 2024 年主要出口地區依出口金額由高至低排名為",
+["中國大陸 - 美國 - 東協 - 歐洲 - 日本","美國 - 中國大陸 - 歐洲 - 東協 - 日本","中國大陸 - 東協 - 美國 - 歐洲 - 日本","東協 - 中國大陸 - 美國 - 日本 - 歐洲"],
+"<p>2024年台灣主要出口目的地排名：<br>🥇 <strong>中國大陸（含香港）</strong>：最大出口市場<br>🥈 <strong>美國</strong>：AI科技產品需求強勁<br>🥉 <strong>東協</strong>：新南向政策與供應鏈布局<br>4️⃣ <strong>歐洲</strong><br>5️⃣ <strong>日本</strong><br>答案A。</p>");
+
+q(78,"B","針對美國最近對其進口品加徵關稅，下列何者非中國所採取的因應或反制措施？",
+["讓人民幣貶值","擴大代工生產出口","繞道出口洗產地","管制稀土出口"],
+"<p>中國的反制策略：<br>• 人民幣貶值：讓出口商品相對更便宜，抵消關稅影響（反制措施）<br>• 洗產地：透過越南、墨西哥等地轉口規避標籤（規避手段）<br>• 管制稀土：中國控制全球70%以上稀土，是重要反制籌碼<br>• <strong>擴大代工生產出口</strong>：只是正常商業行為，不是專門針對美國關稅的反制策略 ✗<br>答案B。</p>");
+
+q(79,"C","關於美國川普總統提出的對等關稅（Reciprocal Tariffs）計畫，下列敘述何者正確？",
+["符合 WTO 最惠國待遇精神","僅適用於鋼鐵、鋁、穀物等大宗物資商品","實施後針對同一產品，美國對各國課徵的關稅稅率可能有所不同","所考慮者僅為各國對美國的關稅水準，而無非關稅貿易障礙"],
+"<p>川普對等關稅邏輯：「你對我商品課多少，我就對你課多少」。<br>C正確：各國稅率不同（台灣32%、越南46%、歐盟20%等），同一產品對不同國家有不同稅率。<br>A錯：明顯違反WTO最惠國待遇原則。B錯：幾乎所有商品都適用。D錯：也考慮非關稅障礙。</p>");
+
+q(80,"A","關於美國川普總統上任後實施的主要貿易政策，下列敘述何者有誤？",
+["簽訂更多自由貿易協定","對從中國進口的商品課徵高額關稅","減少美國對外貿易赤字","減少全球化，推行保護主義"],
+"<p>川普政策核心「美國優先」保護主義：<br>• 對中商品加徵高額關稅（B✓）<br>• 縮小龐大的美國貿易逆差（C✓）<br>• 反對全球化、推動製造業回流（D✓）<br>• A錯：川普<strong>退出</strong>多邊貿易協定（如TPP），偏好雙邊談判，而非積極簽訂更多FTA。</p>");
+
+q(81,"D","Our import costs have risen considerably due to the ______ of the US dollars.",
+["inflation","increase","increment","appreciation"],
+"<p><strong>appreciation = 貨幣升值</strong><br>美元升值(appreciation)→其他國家換美元需付更多本幣→進口成本上升。<br>• inflation：通貨膨脹（物價上漲）<br>• increase：一般增加（不特指貨幣）<br>• increment：增量（常用於薪資）<br>• <strong>appreciation</strong>：（貨幣）升值 ✅<br>反義：depreciation（貶值）</p>");
+
+q(82,"B","______ will fill up a 20-foot container?",
+["How much quantity","What quantity","How many quantities","What a quantity"],
+"<p><strong>What quantity</strong> = 詢問數量的正確用法。<br>quantity（數量）是不可數名詞：<br>• How much quantity ✗（重複語義）<br>• <strong>What quantity ✅</strong><br>• How many quantities ✗（quantities不這樣用）<br>• What a quantity ✗（語法錯誤）<br>正確句：What quantity will fill up a 20-foot container?</p>");
+
+q(83,"C","We need the goods urgently. Please ______ production.",
+["expand","expatriate","expedite","extend"],
+"<p><strong>expedite = 加速、催促</strong><br>句意：我們急需這批貨，請<u>加速</u>生產。<br>• expand：擴大（規模）<br>• expatriate：外派（人員）<br>• <strong>expedite</strong>：加速、催促 ✅（貿易書信超常用詞）<br>• extend：延長（期限）<br>常見搭配：expedite delivery / expedite shipment</p>");
+
+q(84,"A","We cannot meet your latest shipment date and expiry date. Please ______ your L/C to ______ them both by 15 days.",
+["amend; extend","revise; lengthen","modify; delay","change; expand"],
+"<p>• <strong>amend</strong>：信用狀的正式修改用語（L/C amendment 是標準術語）<br>• <strong>extend</strong>：延長日期/期限的標準動詞<br>其他選項雖然revise/modify有修改之意，但在L/C操作中「amend」是法律意義上的正確用詞。<br>標準句型：Please amend your L/C to extend the shipment date and expiry date by 15 days.</p>");
+
+q(85,"D","We believe that there is a promising market in Asia for your products, ______.",
+["if you place regular orders","unless they are high-quality","as long as we can supply from stock","provided they are competitively priced"],
+"<p><strong>provided (that) = 只要…（條件子句）</strong><br>句意：只要貴產品定價具競爭力，亞洲就有大好市場。<br>• A：如果你下定期訂單——語意不通<br>• B：除非有品質——邏輯相反<br>• C：只要我們有庫存——主詞混亂<br>• <strong>D provided they are competitively priced</strong>：邏輯完整 ✅</p>");
+
+q(86,"D","Our order was ______ to arrive by April 16, but we have not received any communication from you regarding the cause of the delay.",
+["expect","suppose","schedule","due"],
+"<p><strong>be due to + V = 預計發生（最正式的商業英文表達）</strong><br>• expected to arrive ✅（也正確但是過去分詞）<br>• supposed to arrive ✅（也正確）<br>• scheduled to arrive ✅（也正確）<br>• <strong>due to arrive</strong> ✅（due是形容詞，搭配was，最正式的商業書信用語）<br>題目要填空格接「to arrive」，due是最適合的答案。</p>");
+
+q(87,"C","As we will cover shipping costs ourselves, could you lower the price ______ 5%?",
+["at","for","by","to"],
+"<p><strong>lower by 5% = 降低5%的幅度</strong><br>• lower <strong>by</strong> 5%：降低5%（表示「幅度/差距」）✅<br>• lower <strong>to</strong> 5%：降到5%（表示「目標值」，此處無此意）<br>• lower at/for 5%：文法錯誤<br>常見貿易英文：reduce by 10% / discount by 5% / increase by 3%（變動幅度用by）</p>");
+
+q(88,"D","______, we have individually wrapped each piece in waterproof material.",
+["At request","Per request","Follow your request","As requested"],
+"<p><strong>As requested = 依照您的要求（最正式標準用語）</strong><br>• <strong>As requested</strong> ✅（最正式、最常用）<br>• As per your request ✅（也正確）<br>• At request ✗（不自然）<br>• Per request ✗（口語，不夠正式）<br>• Follow your request ✗（動詞用法錯誤）</p>");
+
+q(89,"A","There are ______ in the items we received; some products were missing from our order, and we request immediate delivery of the missing items.",
+["discrepancies","defects","delays","discounts"],
+"<p><strong>discrepancies = 差異、不符之處</strong><br>後文說「部分產品遺失」→ 是數量/品項與訂單不符的差異。<br>• <strong>discrepancies</strong>：差異、不符 ✅<br>• defects：瑕疵（品質問題，後文說的是數量缺少）<br>• delays：延遲（時間）<br>• discounts：折扣<br>貿易英文常見：discrepancy in quantity / discrepancy in documents</p>");
+
+q(90,"D","Despite our previous reminders, the payment for invoice No. B215 remains ______.",
+["postponed","processed","unsettling","outstanding"],
+"<p><strong>outstanding = 未清償的、逾期未付的</strong><br>句意：儘管我們之前已催款，B215號發票的款項仍然未清償。<br>• postponed：已被延後（有人主動決定）<br>• processed：已處理<br>• unsettling：令人不安（不接款項）<br>• <strong>outstanding</strong>：（帳款）未付清、逾期未繳 ✅<br>常見用法：outstanding balance / outstanding invoice / outstanding payment</p>");
+
+q(91,"D","（依附件信用狀）本信用狀的相關銀行，下列何者正確？",
+["通知銀行：SHINHAN BANK, SEOUL","讓購銀行：SHINHAN BANK, SEOUL","開狀銀行：BANK OF TAIWAN, TAICHUNG BRANCH","轉讓銀行：BANK OF TAIWAN, TAICHUNG BRANCH"],
+"<p>信用狀各銀行角色：<br>• <strong>開狀銀行</strong>：SHINHAN BANK（SH-025123，韓國新韓銀行）<br>• <strong>通知暨轉讓銀行</strong>：Field 57A = <strong>BANK OF TAIWAN, TAICHUNG BRANCH</strong><br>• Field 47A明述「THIS CREDIT IS TRANSFERABLE THROUGH THE ADVISING BANK」→ 通知銀行同時即為轉讓銀行<br>D正確：轉讓銀行 = BANK OF TAIWAN, TAICHUNG BRANCH</p>");
+
+q(92,"C","（依附件信用狀）針對本信用狀的押匯文件，下列何者可以不由受益人簽發？",
+["匯票","發票","包裝單","品質證明書"],
+"<p>分析Field 46A要求：<br>• 匯票：由出票人（受益人/出口商）簽發<br>• 發票：須附「WE HEREBY CERTIFY」認證聲明 → 必須受益人<br>• <strong>包裝單（Packing List）</strong>：只說「IN DUPLICATE」，未要求簽署或認證 → 不一定受益人簽發 ✅<br>• 品質證明書：「ISSUED BY BENEFICIARY」→ 必須受益人<br>答案C。</p>");
+
+q(93,"D","（依附件信用狀）本信用狀為",
+["不可撤銷、已保兌信用狀","不可轉讓、不保兌信用狀","可轉讓、承兌信用狀","可轉讓、讓購信用狀"],
+"<p>關鍵欄位判斷：<br>• Field 40A = IRREVOCABLE → 不可撤銷<br>• Field 41A = ADVISING BANK BY <strong>NEGOTIATION</strong> → <strong>讓購信用狀</strong><br>• Field 47A → <strong>TRANSFERABLE</strong> → <strong>可轉讓</strong><br>• Field 49 = MAY ADD → 可加保兌，但尚未保兌<br>結論：<strong>可轉讓、讓購信用狀</strong>。答案D。</p>");
+
+q(94,"B","（依附件信用狀及單據內容）押匯文件之提示期限為何？",
+["2025 年 7 月 31 日","2025 年 7 月 30 日","2025 年 7 月 29 日","2025 年 8 月 1 日"],
+"<p>計算提示期限（取較早者）：<br>• 裝船日（B/L Shipped on Board Date）= <strong>JULY 21, 2025</strong><br>• Field 48：裝船後10天內 = 7/21 + 10天 = <strong>7/31</strong><br>• Field 31D：信用狀失效日 = <strong>250730（2025年7月30日）</strong><br>取較早者 = <strong>2025年7月30日</strong><br>答案B。</p>");
+
+q(95,"C","（依附件信用狀及單據內容）下列敘述何者正確？",
+["提單應為記名式","匯票為單張匯票","保險理賠地點在韓國","產地證明書應由公證行簽發"],
+"<p>逐一核對：<br>• A錯：L/C要求「MADE OUT TO OUR ORDER」→ 指示式提單，非記名式<br>• B錯：匯票寫「FIRST of Exchange (Second of same tenor...)」→ 一式兩張<br>• <strong>C正確</strong>：保險單要求「CLAIMS PAYABLE IN KOREA」→ 韓國理賠 ✅<br>• D錯：產地證明書由「CHAMBER OF COMMERCE（商工會議所）」簽發，非公證行</p>");
+
+q(96,"B","（依附件匯票）下列何者為所附匯票空格 (1)(2) 的正確記載內容？",
+["(1) SHINHAN BANK, SEOUL；(2) SUNSHINE CO., LTD.","(1) SHINHAN BANK, SEOUL；(2) GLORY INTERNATIONAL CO., LTD.","(1) BANK OF TAIWAN, TAICHUNG BRANCH；(2) SUNSHINE CO., LTD.","(1) BANK OF TAIWAN, TAICHUNG BRANCH；(2) GLORY INTERNATIONAL CO., LTD."],
+"<p>• 空格(1) = <strong>Drawee（付款人）</strong>：依Field 42A = <strong>SHINHAN BANK, SEOUL</strong>（開狀銀行）<br>• 空格(2) = <strong>Drawer（出票人/簽名）</strong> = 受益人 = <strong>GLORY INTERNATIONAL CO., LTD.</strong>（出口商）<br>SUNSHINE CO., LTD.是申請人（進口商），不是匯票出票人。<br>答案B。</p>");
+
+q(97,"D","（依附件發票）下列所附發票空格 (3)(4)(5)(6) 的記載內容何者正確？",
+["(3) EVER CAST","(4) KEELUNG","(5) INV NO.","(6) TAIWAN"],
+"<p>核對各空格：<br>• (3) = 船名：提單Vessel = EVER CAST（可能正確但題目設計是考(6)）<br>• (4) = 裝載港：提單 Port of Loading = TAICHUNG（不是Keelung），B錯<br>• (5) = 文件編號欄：應填 P/I NO.（不是INV NO.），C錯<br>• <strong>(6) = 產地認證：應填 TAIWAN（L/C要求GOODS ARE OF TAIWAN ORIGIN）</strong> ✅<br>答案D。</p>");
+
+q(98,"C","（依附件發票）下列所附發票空格 (7) 的記載內容何者正確？",
+["CIF BUSAN, KOREA (INCOTERMS 2010)","CIF ULSAN, KOREA (INCOTERMS 2010)","CIF BUSAN, KOREA (INCOTERMS 2020)","CIF ULSAN, KOREA (INCOTERMS 2020)"],
+"<p>兩個關鍵判斷：<br>• 目的港：Field 44F = <strong>BUSAN, KOREA</strong>（不是蔚山Ulsan）<br>• Incoterms版本：Field 45A明確載明 <strong>INCOTERMS 2020</strong>（不是2010）<br>因此：<strong>CIF BUSAN, KOREA (INCOTERMS 2020)</strong><br>答案C。</p>");
+
+q(99,"D","（依附件提單）下列何者為所附提單空格 (8) 應記載內容？",
+["TO ORDER","TO OUR ORDER","TO ORDER OF SHIPPER","TO ORDER OF SHINHAN BANK, SEOUL"],
+"<p>L/C Field 46A要求：「BILLS OF LADING MADE OUT TO <strong>OUR ORDER</strong>」<br>「OUR」= 開狀銀行（寫信用狀的銀行）= <strong>SHINHAN BANK, SEOUL</strong><br>因此提單Consignee欄應填：<strong>TO ORDER OF SHINHAN BANK, SEOUL</strong><br>（信用狀自己說「TO OUR ORDER」，實際填入提單時要寫出完整銀行名稱）<br>答案D。</p>");
+
+q(100,"A","（依附件提單）下列何者為所附提單空格 (9)(10) 應記載內容？",
+["(9) FREIGHT PREPAID；(10) FOUR (4)","(9) FREIGHT COLLECT；(10) FOUR (4)","(9) FREIGHT PREPAID；(10) THREE (3)","(9) FREIGHT COLLECT；(10) THREE (3)"],
+"<p>兩個空格判斷：<br><strong>(9) 運費標記：</strong><br>• 本批為CIF條件 → 賣方負責支付運費 → <strong>FREIGHT PREPAID（運費預付）</strong><br>• FOB條件才標FREIGHT COLLECT（到付）<br><br><strong>(10) 正本份數：</strong><br>• L/C Field 46A要求「FULL SET <strong>(4/4)</strong> of Clean on Board Bills of Lading」<br>• 共4份正本 → <strong>FOUR (4)</strong><br><br>答案A。</p>");
+
+// ── RENDER ─────────────────────────────────
+function goSec(idx,btn){
+  document.querySelectorAll(".sec-page").forEach(function(p){p.classList.remove("on");});
+  document.querySelectorAll(".tab").forEach(function(b){b.classList.remove("on");});
+  document.getElementById("sec"+idx).classList.add("on");
+  btn.classList.add("on");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function answer(qIdx,sel){
+  if(answered[qIdx]!==null)return;
+  var q=QS[qIdx];
+  var ok=sel===q.ans;
+  answered[qIdx]=ok?"ok":"ng";
+  var card=document.getElementById("c"+qIdx);
+  card.classList.add(ok?"ok":"ng");
+  var btns=card.querySelectorAll(".opt-btn");
+  var keys=["A","B","C","D"];
+  btns.forEach(function(b,i){
+    b.disabled=true;
+    if(keys[i]===sel&&ok)b.classList.add("sel-ok");
+    else if(keys[i]===sel&&!ok)b.classList.add("sel-ng");
+    if(keys[i]===q.ans&&!ok)b.classList.add("show-ok");
+  });
+  var ab=document.getElementById("a"+qIdx);
+  ab.classList.add("on");
+  var vd=ab.querySelector(".verdict");
+  vd.className="verdict "+(ok?"ok":"ng");
+  vd.innerHTML=(ok?"✅ 答對了！正確答案是 <strong>("+q.ans+")</strong>":"❌ 答錯了！正確答案是 <strong>("+q.ans+")</strong>");
+  updateUI();
+  setTimeout(function(){ab.scrollIntoView({behavior:"smooth",block:"nearest"});},120);
+}
+
+function updateUI(){
+  var done=answered.filter(function(x){return x!==null;}).length;
+  document.getElementById("pt").textContent=done+" / 100";
+  document.getElementById("pb").style.width=(done)+"%";
+  for(var s=0;s<5;s++){
+    var sl=answered.slice(s*20,(s+1)*20);
+    var cor=sl.filter(function(x){return x==="ok";}).length;
+    var tot=sl.filter(function(x){return x!==null;}).length;
+    document.getElementById("s"+s).textContent=cor+"/"+(tot===0?20:tot);
+  }
+}
+
+function build(){
+  var keys=["A","B","C","D"];
+  var secData=[
+    {idx:0,ico:"📦",t:"Q1–20 貿易基礎與 Incoterms",d:"代理交易、政府機關職掌、Incoterms 2020 貿易條件、通關流程、品質數量條件"},
+    {idx:1,ico:"📋",t:"Q21–40 交貨、契約與付款方式",d:"交貨條件細節、信用狀基礎、報價與要約、CISG接受規定"},
+    {idx:2,ico:"🏦",t:"Q41–60 信用狀、運輸與保險",d:"UCP600規定、各類運輸文件性質、貨物保險條款與理賠機制"},
+    {idx:3,ico:"💱",t:"Q61–80 糾紛、計算題與貿易時事",d:"仲裁地選擇、進出口費用計算、台灣與全球貿易趨勢"},
+    {idx:4,ico:"🔤",t:"Q81–100 商業英文與信用狀實務",d:"貿易英文詞彙填空，及依附件信用狀與單據回答的綜合題"}
+  ];
+
+  var main=document.getElementById("main");
+  var html="";
+
+  for(var s=0;s<5;s++){
+    var sd=secData[s];
+    html+='<div class="sec-page'+(s===0?" on":"")+'" id="sec'+s+'">';
+    html+='<div class="sec-head"><div class="ico">'+sd.ico+'</div><div><h2>'+sd.t+'</h2><p>'+sd.d+'</p></div></div>';
+
+    // LC panel for section 4
+    if(s===4){
+      html+='<div class="lc-wrap"><div class="lc-hdr" onclick="toggleLC(this)"><h3>📄 附件信用狀及單據資料（第91–100題對照參考）</h3><span class="lc-arr">▼</span></div>';
+      html+='<div class="lc-body"><div class="lc-tbl">';
+      html+='<span class="ltitle">【信用狀主要欄位】</span>';
+      html+='<span class="lf">40A 型態</span><span class="lv">IRREVOCABLE（不可撤銷）</span>';
+      html+='<span class="lf">20 號碼</span><span class="lv">SH-025123</span>';
+      html+='<span class="lf">31C 開狀日</span><span class="lv">250502（2025/05/02）</span>';
+      html+='<span class="lf">31D 失效日</span><span class="lv">250730 TAIWAN（2025/07/30）</span>';
+      html+='<span class="lf">50 申請人</span><span class="lv">SUNSHINE CO., LTD.（韓國仁川）</span>';
+      html+='<span class="lf">59 受益人</span><span class="lv">GLORY INTERNATIONAL CO., LTD.（台灣台中）</span>';
+      html+='<span class="lf">32B 金額</span><span class="lv">USD 48,000.00</span>';
+      html+='<span class="lf">41A 使用方式</span><span class="lv">ADVISING BANK BY NEGOTIATION（讓購）</span>';
+      html+='<span class="lf">42C 匯票期限</span><span class="lv">30 DAYS AFTER DATE</span>';
+      html+='<span class="lf">42A 付款人</span><span class="lv">SHINHAN BANK, SEOUL</span>';
+      html+='<span class="lf">43P 分批裝運</span><span class="lv">ALLOWED</span>';
+      html+='<span class="lf">43T 轉運</span><span class="lv">PROHIBITED</span>';
+      html+='<span class="lf">44E 裝載港</span><span class="lv">ANY PORT OF TAIWAN</span>';
+      html+='<span class="lf">44F 卸貨港</span><span class="lv">BUSAN, KOREA</span>';
+      html+='<span class="lf">44C 最後裝船日</span><span class="lv">250722（2025/07/22）</span>';
+      html+='<span class="lf">45A 貨物</span><span class="lv">4,000 PCS OF SPARE PARTS FOR CUTTING MACHINE，CIF BUSAN, KOREA (INCOTERMS 2020)</span>';
+      html+='<div class="lsep"></div><span class="ltitle">【46A 要求單據】</span>';
+      html+='<span class="lf">發票</span><span class="lv">商業發票一式三份，須認證台灣原產地</span>';
+      html+='<span class="lf">提單</span><span class="lv">全套正本4/4份，指示式（MADE OUT TO OUR ORDER），FREIGHT PREPAID，NOTIFY APPLICANT</span>';
+      html+='<span class="lf">保險單</span><span class="lv">發票金額110%，ICC(A)09.1.1，理賠在韓國</span>';
+      html+='<span class="lf">包裝單</span><span class="lv">一式兩份</span>';
+      html+='<span class="lf">產地證明書</span><span class="lv">由Chamber of Commerce（商工會議所）簽發</span>';
+      html+='<span class="lf">品質證明書</span><span class="lv">由BENEFICIARY（受益人）簽發</span>';
+      html+='<div class="lsep"></div><span class="ltitle">【附加條件 47A / 48 / 49 / 57A】</span>';
+      html+='<span class="lf">可轉讓</span><span class="lv">THIS CREDIT IS TRANSFERABLE THROUGH THE ADVISING BANK</span>';
+      html+='<span class="lf">48 提示期限</span><span class="lv">裝船後10天內，不得超過L/C失效日</span>';
+      html+='<span class="lf">49 保兌</span><span class="lv">MAY ADD（可加保兌，尚未保兌）</span>';
+      html+='<span class="lf">57A 通知銀行</span><span class="lv">BANK OF TAIWAN, TAICHUNG BRANCH</span>';
+      html+='<div class="lsep"></div><span class="ltitle">【附件單據摘要】</span>';
+      html+='<span class="lf">匯票</span><span class="lv">Draft No.GI-543，JULY 23, 2025，USD48,000，30天遠期，一式兩張</span>';
+      html+='<span class="lf">提單</span><span class="lv">船名EVER CAST，裝載港TAICHUNG，B/L Date: JULY 22, 2025，Shipped on Board: JULY 21, 2025</span>';
+      html+='</div></div></div>';
+    }
+
+    var start=s*20;
+    for(var i=0;i<20;i++){
+      var qi=start+i;
+      var q=QS[qi];
+      html+='<div class="qcard" id="c'+qi+'">';
+      html+='<div class="qhdr"><div class="qnum">'+q.n+'</div><div class="qtxt">'+q.text.replace(/\n/g,"<br>")+'</div></div>';
+      html+='<div class="qopts">';
+      for(var j=0;j<4;j++){
+        html+='<button class="opt-btn" onclick="answer('+qi+'&comma;\''+keys[j]+'\')"><span class="k">'+keys[j]+'</span><span>'+q.opts[j]+'</span></button>';
+      }
+      html+='</div>';
+      html+='<div class="ans-box" id="a'+qi+'"><div class="verdict"></div>';
+      html+='<div class="explain"><div class="elbl">📚 解說</div>'+q.exp+'</div></div>';
+      html+='</div>';
+    }
+    html+='</div>';
+  }
+  main.innerHTML=html;
+}
+
+function toggleLC(hdr){
+  hdr.classList.toggle("on");
+  var arr=hdr.querySelector(".lc-arr");
+  arr.textContent=hdr.classList.contains("on")?"▲":"▼";
+  hdr.nextElementSibling.classList.toggle("on");
+}
+
+build();
+updateUI();
+</script>
+</body>
+</html>
